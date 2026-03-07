@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-security:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build Next.js app
+        run: bun run build
+
+      - name: Run Semgrep security lint
+        run: bun run lint:security
+
+      - name: Run Gitleaks secret scan
+        run: bun run scan:secrets
+
+      - name: Run Trivy filesystem scan (HIGH/CRITICAL)
+        run: bun run scan:vulns
