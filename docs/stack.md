@@ -4,6 +4,7 @@ Tool / Feature	Purpose / Why Marketable
 Next.js + TypeScript	Modern React framework with SSR/SSG; maintainable, type-safe code.
 Tailwind CSS	Utility-first responsive design; industry standard in React ecosystems.
 ShadCN UI	Accessible, headless component library built on Tailwind; rapid, consistent UI.
+Radix UI	Accessible, unstyled components for building high-quality design systems.
 Framer Motion	High-quality animations, page transitions, and hover effects.
 React Context API	Lightweight global UI state (theme toggles, modals, simple settings).
 TanStack Query	Client–server state management; caching and synchronization for dynamic content (e.g., LLM responses).
