@@ -318,3 +318,12 @@ Planned steps (later phase):
    - Parse Trivy / Docker Scout reports.
    - Propose or apply fixes via automated pull requests.
 4. Add a separate GitHub Actions workflow (e.g., `security-fix.yml`) dedicated to running Copasetic.
+
+# General pattern for creating a PR from a feature branch
+# - Replace <branch-name>, <Title>, and <Body> as needed.
+
+gh pr create \
+  --base main \
+  --head <branch-name> \
+  --title "<Short, descriptive PR title>" \
+  --body "<A few sentences describing what this PR changes and why.>"
