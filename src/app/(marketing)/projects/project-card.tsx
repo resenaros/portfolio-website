@@ -12,6 +12,14 @@ interface ProjectCardProps {
     className?: string;
 }
 
+// Helper functions to determine the platform of a given URL
+function isGithub(hostname: string) {
+    return hostname === "github.com" || hostname.endsWith(".github.com");
+}
+function isHuggingFace(hostname: string) {
+    return hostname === "huggingface.co" || hostname.endsWith(".huggingface.co");
+}
+
 // Platforms that support iframe embedding
 function getEmbedUrl (url: string): string | null {
     try {
@@ -27,7 +35,7 @@ function getEmbedUrl (url: string): string | null {
         if (
             hostname.endsWith(".vercel.app") ||
             hostname.endsWith(".netlify.app") ||
-            (!hostname.includes("github.com") && !hostname.includes("huggingface.co"))
+            (!isGithub(hostname) && !isHuggingFace(hostname))
         ) {
             return url;
         }
