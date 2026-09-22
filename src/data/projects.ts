@@ -7,6 +7,7 @@ export type Project = {
     role: string;
     year: string;
     thumbnail?: string;
+    featured?: boolean;
     links?: {
         github?: string;
         live?: string;
@@ -25,6 +26,7 @@ export const projects: Project[] = [
         role: "Full-stack engineer",
         year: "2026",
         thumbnail: "/vercel.svg", /*placeholder image*/
+        featured: true,
         links: {
             github: "https://github.com/resenaros/portfolio-website",
         },
@@ -36,7 +38,8 @@ export const projects: Project[] = [
         indexes portfolio docs and project READMEs to answer questions with citations. Built with FastAPI, and LangChain`,
         tech: ["FastAPI", "LangChain", "Chromadb", "HuggingFace"],
         role: "Backend / ML engineer",
-        year: "2026"
+        year: "2026",
+        featured: true,
     },
     {
         slug: "security-automation",
@@ -45,7 +48,8 @@ export const projects: Project[] = [
         on every push. Enforces branch protection and status checks for production branches.`,
         tech: ["Github Actions", "Semgrep", "Gitleaks", "Trivy", "CodeQL"],
         role: "DevSecOps Engineer",
-        year: "2025"
+        year: "2025",
+        featured: false,
     },
     {
   slug: "my-patristics-rag",
@@ -68,6 +72,7 @@ export const projects: Project[] = [
   role: "AI/ML Engineer",
   year: "2026",
   thumbnail: "/globe.svg", /*placeholder image*/
+  featured: true,
   links: {
     github: "https://github.com/resenaros/my-patristics-rag",
     live: "https://huggingface.co/spaces/ara967/patristics-rag-agent-demo"
