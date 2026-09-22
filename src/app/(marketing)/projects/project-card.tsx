@@ -73,7 +73,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
         >
             {/* Live preview iframe */}
             {showPreview && (
-                <div className="relative w-full overflow-hidden rounded-t-lg border-b bg-muted" style={{ height: "200px" }}>
+                <div className="relative h-48 w-full overflow-hidden rounded-t-lg border-b bg-muted">
                     <iframe
                         src={embedUrl}
                         title={`${project.name} live preview`}
@@ -96,12 +96,12 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
 
             {/* No preview available - show a placeholder */}
             {!showPreview && liveUrl && (
-                <div className="relative h-32 overflow-hidden rounded-t-lg border-b bg-muted">
+                <div className="relative h-48 overflow-hidden rounded-t-lg border-b bg-muted">
                     {project.thumbnail ? (
                         <img
                             src={project.thumbnail}
                             alt={`${project.name} preview`}
-                            className="h-full w-full object-cover"
+                            className="h-full w-full object-contain p-6"
                         />
                     ) : (
                         <div className="flex h-full items-center justify-center text-xs text-muted-foreground">

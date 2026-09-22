@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { FeaturedProjects } from "@/components/featured-projects";
 
 const heroVariants = {
   hidden: { opacity:0, y:24},
@@ -13,9 +14,9 @@ const heroVariants = {
 
 export default function HomePage() {
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center">
+    <div className="mx-auto flex max-w-6xl flex-col gap-16 px-4 py-12 md:px-6">
       
-      <div className="flex flex-col gap-10">
+      <div className="flex min-h-[calc(100vh-4rem)] flex-col justify-center gap-10">
         <motion.section
          initial="hidden"
          animate="visible"
@@ -80,6 +81,7 @@ export default function HomePage() {
           </span>
          </section>
       </div>
+      <FeaturedProjects />
     </div>
   );
 }
