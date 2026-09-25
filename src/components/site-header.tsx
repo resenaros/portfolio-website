@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { MainNav } from "./main-nav";
+import { ModeToggle } from "@/components/mode-toggle";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
@@ -13,9 +14,12 @@ export function SiteHeader() {
                 <Link href="/" className="flex items-center gap-2">
                     <span className="text-base font-semibold tracking-tight">
                         resenaros.dev
-                        </span>
+                    </span>
                 </Link>
-                <MainNav />
+                <div className="flex items-center gap-4">
+                    <MainNav />
+                    <ModeToggle />
+                </div>
             </div>
         </header>
     );
