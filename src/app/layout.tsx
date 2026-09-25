@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers"
 import { SiteHeader } from "@/components/site-header"
 import { cn } from "@/lib/utils"; 
+import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
   title: "Software Engineer Portfolio",
@@ -16,16 +17,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <Providers>
-          <SiteHeader />
-          <main className={cn("mx-auto min-h-[calc(100vh-4rem)] max-w-5xl",
-          "px-4 py-8 sm:px-6 lg:px-8")}>
-          {children}
-          </main>
-        </Providers>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+          >
+          <Providers>
+            <SiteHeader />
+            <main className={cn("mx-auto min-h-[calc(100vh-4rem)] max-w-5xl",
+            "px-4 py-8 sm:px-6 lg:px-8")}>
+              {children}
+            </main>
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
