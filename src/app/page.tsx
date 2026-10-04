@@ -32,12 +32,12 @@ export default function HomePage() {
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             Building secure, modern web applications
             <br className="hidden sm:block" />
-            <span className="text-foreground/80"> with Next.js and FastAPI.</span>
+            <span className="text-foreground/80"> with Next.js and Flask.</span>
           </h1>
 
           <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
             I design and ship full-stack systems with a focus on security, observability, and developer
-            experience—from responsive React frontends to FastAPI backends, CI pipelines, and containerized deployments.
+            experience—from responsive React frontends to Flask backends, CI pipelines, and containerized deployments.
           </p>
 
           <div className="flex flex-wrap items-center gap-4">
@@ -71,7 +71,7 @@ export default function HomePage() {
             Next.js - Typescript - Tailwind - shadcn/ui
           </span>
           <span className="rounded-full border border-border px-2 py-1">
-            FastAPI - PostgreSQL - Redis - Docker
+            Flask - PostgreSQL - Redis - Docker
           </span>
           <span className="rounded-full border border-border px-2 py-1">
             Semgrep - Gitleaks - Trivy - Github Actions
