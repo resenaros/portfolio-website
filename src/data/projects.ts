@@ -8,6 +8,7 @@ export type Project = {
     year: string;
     thumbnail?: string;
     featured?: boolean;
+    status?: "shipped" | "planned";
     links?: {
         github?: string;
         live?: string;
@@ -20,9 +21,9 @@ export const projects: Project[] = [
         slug: "portfolio-platform",
         name: "Portfolio Platform (Full-Stack)",
         description:
-            `End-to-end portfolio platform with a Next.js frontend, FastAPI backend, and a secure 
+            `End-to-end portfolio platform with a Next.js frontend, Flask backend, and a secure 
             infrastructure stack on AWS. Includes CI/CD, Observability, and OWASP-aligned security tooling.`,
-        tech: ["Next.js", "Typescript", "Tailwind", "Shadcn/ui", "FastAPI", "PostgreSQL", "Docker", "AWS"],
+        tech: ["Next.js", "Typescript", "Tailwind", "Shadcn/ui", "Flask", "PostgreSQL", "Docker", "AWS"],
         role: "Full-stack engineer",
         year: "2026",
         thumbnail: "/vercel.svg", /*placeholder image*/
@@ -35,11 +36,12 @@ export const projects: Project[] = [
         slug: "llm-rag-api",
         name: "LLM RAG API for Portfolio Content",
         description: `Retrieval-augmented generation (RAG) API that 
-        indexes portfolio docs and project READMEs to answer questions with citations. Built with FastAPI, and LangChain`,
-        tech: ["FastAPI", "LangChain", "Chromadb", "HuggingFace"],
+        indexes portfolio docs and project READMEs to answer questions with citations. Built with Next.js Route Handlers, and LangChain`,
+        tech: ["Next.js", "LangChain", "Chromadb", "HuggingFace"],
         role: "Backend / ML engineer",
         year: "2026",
-        featured: true,
+        featured: false,
+        status: "planned",
     },
     {
         slug: "security-automation",
