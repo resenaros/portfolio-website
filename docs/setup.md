@@ -327,3 +327,9 @@ gh pr create \
   --head <branch-name> \
   --title "<Short, descriptive PR title>" \
   --body "<A few sentences describing what this PR changes and why.>"
+
+# Watch the status of the PR checks for the specified branch
+gh pr checks <branch-name> --watch
+
+# Merge the PR for the specified branch using squash and delete the branch afterward
+gh pr merge <branch-name> --squash --delete-branch

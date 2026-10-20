@@ -1,67 +1,54 @@
 // src/app/(marketing)/projects/project-card.tsx
 "use client";
 
-import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
+import { ArrowUpRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Project } from "@/data/projects";
 import { cn } from "@/lib/utils";
+import { SiGithub } from "react-icons/si";
 
 interface ProjectCardProps {
     project: Project;
     className?: string;
 }
 
-// Helper functions to determine the platform of a given URL
-function isGithub(hostname: string) {
-    return hostname === "github.com" || hostname.endsWith(".github.com");
-}
-function isHuggingFace(hostname: string) {
-    return hostname === "huggingface.co" || hostname.endsWith(".huggingface.co");
+const SLIDE_DURATION_MS = 3000; // 3 seconds
+
+function Slideshow({ images, alt }: { images: string[]; alt:  string }) {
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        if (images.length <= 1) return;
+        const timer = setInterval(() => {
+            setIndex((prev) => (prev +1) % images.length);
+        }, SLIDE_DURATION_MS);
+            return () => clearInterval(timer);
+    }, [images.length]);
+
+    return (
+        <div className="relative h-full w-full overflow-hidden">
+            {images.map((src, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                    key={src}
+                    src={src}
+                    alt={`${alt} screenshot ${i + 1}`}
+                    className={cn(
+                        "absolute inset-0 h-full w-full object-contain p-6 transition-opacity duration-500",
+                        i === index ? "opacity-100" : "opacity-0"
+                    )}
+                />
+            ))}
+        </div>
+    );
 }
 
-// Platforms that support iframe embedding
-function getEmbedUrl (url: string): string | null {
-    try {
-        const { hostname, pathname } = new URL(url);
-        
-        // Hugging Face Spaces - embed via /embed/ path 
-        if (hostname === "huggingface.co" && pathname.includes("/spaces/")) {
-            const separator = url.includes("?") ? "&" : "?";
-            return `${url}${separator}embed=true`;
-        }
-
-        // Vercel / Netlify / custom domains - try direct embed
-        if (
-            hostname.endsWith(".vercel.app") ||
-            hostname.endsWith(".netlify.app") ||
-            (!isGithub(hostname) && !isHuggingFace(hostname))
-        ) {
-            return url;
-        }
-
-        // GitHub repos don't support iframe embedding
-        return null;
-    } catch {
-        return null;
-    }
-}
 export function ProjectCard({ project, className }: ProjectCardProps) {
-    const [previewError, setPreviewError] = useState(false);
-    const [previewLoaded, setPreviewLoaded] = useState(false);
     const liveUrl = project.links?.live;
     const githubUrl = project.links?.github;
     const docsUrl =project.links?.docs;
-    const embedUrl = liveUrl ? getEmbedUrl(liveUrl) : null;
-    const showPreview = embedUrl && !previewError;
-
-    useEffect (() => {
-        if (!showPreview) return;
-        const timer = setTimeout(() => {
-            if (!previewLoaded) setPreviewError(true);
-        }, 4000);
-        return () => clearTimeout(timer);
-    }, [showPreview, previewLoaded]);
+    const hasScreenshots = (project.screenshots?.length ?? 0) > 0;
 
     return (
         <article
@@ -71,44 +58,30 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
                 className
             )}
         >
-            {/* Live preview iframe */}
-            {showPreview && (
-                <div className="relative h-48 w-full overflow-hidden rounded-t-lg border-b bg-muted">
-                    <iframe
-                        src={embedUrl}
-                        title={`${project.name} live preview`}
-                        className="h-full w-full"
-                        loading="lazy"
-                        sandbox="allow-scripts allow-forms"
-                        onLoad={() => setPreviewLoaded(true)}
-                        onError={() => setPreviewError(true)}
-                        />
-                    {/* Overlay - clicking the preview opens the live site */}
-                    <Link
-                        href={liveUrl!}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="absolute inset-0 z-10 cursor-pointer"
-                        aria-label={`Open ${project.name} live site`}
-                        />
+            {/* Tier 1: Auto-advancing screenshot slideshow (preferred when available) */}
+            {hasScreenshots && (
+                <div className="relative h-48 overflow-hidden rounded-t-lg border-b bg-muted">
+                    <Slideshow images={project.screenshots!} alt={project.name} />
                 </div>
             )}
 
-            {/* No preview available - show a placeholder */}
-            {!showPreview && liveUrl && (
+            {/* Tier 2: Static thumbnail (no screenshots, thumbnail available) */}
+            {!hasScreenshots && project.thumbnail && (
                 <div className="relative h-48 overflow-hidden rounded-t-lg border-b bg-muted">
-                    {project.thumbnail ? (
-                        <img
-                            src={project.thumbnail}
-                            alt={`${project.name} preview`}
-                            className="h-full w-full object-contain p-6"
-                        />
-                    ) : (
-                        <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
-                    Preview not available. Click to visit the live site.
-                        </div> 
-                )}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={project.thumbnail}
+                        alt={`${project.name} preview`}
+                        className="h-full w-full object-contain p-6"
+                    />
                 </div>
+            )}
+
+            {/* Tier 3: No preview available at all */}
+            {!hasScreenshots && !project.thumbnail && liveUrl &&(
+                <div className="relative flex h-48 items-center justify-center rounded-t-lg border-b bg-muted text-xs text-muted-foreground">
+                    Preview not available. Click to visit the live site.
+                </div> 
             )}
 
             {/* Card body */}
@@ -149,7 +122,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
                             rel="noopener noreferrer"
                             className="flex items-center gap-1 text-xs text-muted-foreground transition hover:text-foreground"
                         >
-                            <Github className="h-3.5 w-3.5"/>
+                            <SiGithub className="h-3.5 w-3.5"/>
                             Source
                             </Link>
                     )}
