@@ -1,6 +1,7 @@
 # chatbot-backend/app/main.py
 
 import os 
+import logging
 from pathlib import Path
 from typing import List
 
@@ -13,12 +14,13 @@ from langchain_ollama import ChatOllama
 from pydantic import BaseModel, Field
 
 load_dotenv()
+logger = logging.getLogger("chatbot")
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 PERSIST_DIR = BASE_DIR / "chroma_db"
 COLLECTION = os.getenv("CHATBOT_COLLECTION", "portfolio_knowledge")
 EMBED_MODEL = os.getenv("EMBED_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.2:3b")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 ALLOWED_ORIGINS = [
     o.strip()
@@ -93,6 +95,7 @@ def chat(req: ChatRequest):
             for d in docs
         ]
         return ChatResponse(answer=response.content, sources=sources)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Chat request failed: {e}")
+    except Exception:
+        logger.exception("chat failed")
+        raise HTTPException(status_code=500, detail="Chat request failed")
 
