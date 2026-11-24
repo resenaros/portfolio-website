@@ -27,11 +27,17 @@ ALLOWED_ORIGINS = [
     for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
     if o.strip()
 ]
+IS_PROD = os.getenv("APP_ENV", "dev") == "prod"
 
 if not PERSIST_DIR.exists():
     raise RuntimeError(f"{PERSIST_DIR} not found. Run `uv run python scripts/ingest.py` first.")
 
-app = FastAPI(title="Portfolio Chatbot API")
+app = FastAPI(
+    title="Portfolio Chatbot API",
+    docs_url=None if IS_PROD else "/docs",
+    redoc_url=None if IS_PROD else "/redoc",
+    openapi_url=None if IS_PROD else "/openapi.json",
+)
 
 # Lets the Next.js widget call this API from the browser
 app.add_middleware(
