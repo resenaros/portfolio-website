@@ -6,8 +6,11 @@ from pathlib import Path
 from typing import List
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_ollama import ChatOllama
@@ -38,6 +41,10 @@ app = FastAPI(
     redoc_url=None if IS_PROD else "/redoc",
     openapi_url=None if IS_PROD else "/openapi.json",
 )
+
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Lets the Next.js widget call this API from the browser
 app.add_middleware(
@@ -81,7 +88,8 @@ def health():
     return {"status": "ok"}
 
 @app.post("/chat", response_model=ChatResponse)
-def chat(req: ChatRequest):
+@limiter.limit("10/minute")
+def chat(request: Request, req: ChatRequest):
     try:
         docs = retriever.invoke(req.message)
         context = "\n\n".join(
