@@ -1,0 +1,7 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "FastAPI title/docs_url settings are not secrets"
+targetRules = ["generic-api-key"]
+paths = ['''chatbot-backend/app/main\.py''']
